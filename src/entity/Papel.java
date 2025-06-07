@@ -1,9 +1,11 @@
 package entity;
 
+import entity.utils.Options;
+
 public class Papel extends PlayOption{
 
     public Papel() {
         this.imagePath = "";
-        // Não adicionar power aqui
+        this.power.add(Options.PEDRA);
     }
 }

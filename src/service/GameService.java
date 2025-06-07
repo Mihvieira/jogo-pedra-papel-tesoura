@@ -3,6 +3,7 @@ package service;
 import entity.CalcWinner;
 import entity.PlayOption;
 import entity.PlayerGenerator;
+import entity.utils.Options;
 
 public class GameService {
 
@@ -19,12 +20,12 @@ public class GameService {
         return calcWinner.getResult();
     }
 
-    public PlayOption generateEntity(String option){
-        return switch (option) {
-            case "PEDRA" -> new entity.Pedra();
-            case "PAPEL" -> new entity.Papel();
-            case "TESOURA" -> new entity.Tesoura();
-            default -> throw new IllegalArgumentException("Opção inválida: " + option);
-        };
+    public PlayOption generateEntity(String option) {
+        Options opt = Options.valueOf(option);
+        try {
+            return opt.getClassAssociate().getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Não foi possível instanciar a opção: " + option, e);
+        }
     }
 }
