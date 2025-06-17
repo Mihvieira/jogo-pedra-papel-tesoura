@@ -7,25 +7,33 @@ import entity.utils.Options;
 
 public class GameService {
 
-    public GameService() {
-    }
-
-    public PlayOption game(Options userOption) {
+    public Result playRound(Options userOption) {
         if (userOption == null) {
             throw new IllegalArgumentException("Opção não pode ser nula");
         }
-        var player1 = this.generateEntity(userOption);
+        PlayOption player1 = generateEntity(userOption);
         PlayerGenerator player2 = new PlayerGenerator();
-        System.out.println("O player2 escolheu: " + player2.getOption().toString());
-        CalcWinner calcWinner = new CalcWinner(player1, player2.getOption());
-        return calcWinner.getResult();
+        PlayOption player2Option = player2.getOption();
+        CalcWinner calcWinner = new CalcWinner(player1, player2Option);
+        String resultado = calcWinner.calcResult();
+        return new Result(player2Option, resultado);
     }
 
-    public PlayOption generateEntity(Options option) {
+    private PlayOption generateEntity(Options option) {
         try {
             return option.getClassAssociate().getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new IllegalArgumentException("Não foi possível instanciar a opção: " + option, e);
+        }
+    }
+
+    // Classe interna para encapsular o resultado da rodada
+    public static class Result {
+        public final PlayOption player2Option;
+        public final String winner;
+        public Result(PlayOption player2Option, String winner) {
+            this.player2Option = player2Option;
+            this.winner = winner;
         }
     }
 }
