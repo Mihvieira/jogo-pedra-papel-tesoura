@@ -6,31 +6,25 @@ import entity.utils.ResultOptions;
 public class CalcWinner {
     PlayOption playOption1;
     PlayOption playOption2;
-    PlayOption result;
+    String message;
 
     public CalcWinner(PlayOption playOption1, PlayOption playOption2) {
         this.playOption1 = playOption1;
         this.playOption2 = playOption2;
-        this.calcResult();
     }
 
-    public void calcResult() {
+    public String calcResult() {
         if (this.playOption1 == null || this.playOption2 == null) {
             throw new IllegalArgumentException("PlayOption não pode ser nulo");
         }
-        Options opt1 = Options.fromClass(this.playOption1.getClass());
-        Options opt2 = Options.fromClass(this.playOption2.getClass());
 
-        if (opt1 == opt2) {
-            this.result = new Empate();
-        } else if (this.playOption1.power.contains(opt2)) {
-            this.result = this.playOption1;
+        if (this.playOption1.equals(this.playOption2)) {
+            this.message = "Empate!";
+        } else if (this.playOption1.power.contains(Options.fromClass(this.playOption2.getClass()))) {
+            this.message = "Você venceu!";
         } else {
-            this.result = this.playOption2;
+            this.message = "Você perdeu!";
         }
-    }
-
-    public PlayOption getResult() {
-        return result;
+        return message;
     }
 }
